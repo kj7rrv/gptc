@@ -22,4 +22,4 @@ else:
         text = input('Text to analyse: ')
     else:
         text = sys.stdin.read()
-    print(classifier.check(text))
+    print(classifier.classify(text))

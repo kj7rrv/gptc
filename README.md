@@ -15,7 +15,7 @@ If you want to use GPTC programmatically, use the library.
 ### `gptc.Classifier(model)`
 Create a `Classifier` object using the given model (as a Python list/dict, not
 as JSON). If the model is raw (a list), it will print a big warning on stderr.
-### `Classifier.check(text)`
+### `Classifier.classify(text)`
 Classify `text` with GPTC using the model used to instantiate the
 `Classifier`. Returns the category into which the text is placed (as a
 string), or `'unknown'` when it cannot classify the text.

@@ -50,7 +50,7 @@ class Classifier:
                 print('This makes everything slow, because compiling models takes far longer than using them.', file=sys.stderr)
         self.warn = supress_uncompiled_model_warning
 
-    def check(self, text):
+    def classify(self, text):
         model = self.model
         text = listify(text)
         probs = {}
