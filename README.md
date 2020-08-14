@@ -54,5 +54,5 @@ their works have all gone into the public domain, and their writing style is
 so different that GPTC can easily tell the difference, making it a good
 demonstration.
 
-The raw model is in `twain_shakespeare_raw.json`; the compiled model is in
-`twain_shakespeare.json`.
+The raw model is in `models/raw.json`; the compiled model is in
+`models/compiled.json`.
