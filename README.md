@@ -18,7 +18,7 @@ as JSON). If the model is raw (a list), it will print a big warning on stderr.
 ### `Classifier.classify(text)`
 Classify `text` with GPTC using the model used to instantiate the
 `Classifier`. Returns the category into which the text is placed (as a
-string), or `'unknown'` when it cannot classify the text.
+string), or `None` when it cannot classify the text.
 
 ## Model format
 Since you never really need to mess with compiled models, I won't discuss
