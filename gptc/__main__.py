@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import sys
 
 parser = argparse.ArgumentParser(description="General Purpose Text Classifier")
 parser.add_argument('model', help='model to use')

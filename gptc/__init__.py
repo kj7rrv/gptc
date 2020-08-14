@@ -9,68 +9,61 @@ def listify(text):
 
 
 def compile(raw_model):
-    model = {}
+    categories = {}
 
     for portion in raw_model:
         text = listify(portion['text'])
         category = portion['category']
+        try:
+            categories[category] += text
+        except KeyError:
+            categories[category] = text
+
+    categories_by_count = {}
+    
+    for category, text in categories.items():
+        categories_by_count[category] = {}
         for word in text:
             try:
-                model[category].append(word)
-            except:
-                model[category] = [word]
-            model[category].sort()
-    all_models = [ { 'text': model, 'stopword': i/10} for i in range(0, 21) ]
-    for test_model in all_models:
-        correct = 0
-        classifier = Classifier(test_model)
-        for text in raw_model:
-            if classifier.check(text['text']) == text['category']:
-                correct += 1
-        test_model['correct'] = correct
-        print('tested a model')
-    best = all_models[0]
-    for test_model in all_models:
-        if test_model['correct'] > best['correct']:
-            best = test_model
-    del best['correct']
-    return best
-    return {'text': model}
+                categories_by_count[category][word] += 1/len(categories[category])
+            except KeyError:
+                categories_by_count[category][word] = 1/len(categories[category])
+    word_weights = {}
+    for category, words in categories_by_count.items():
+        for word, value in words.items():
+            try:
+                word_weights[word][category] = value
+            except KeyError:
+                word_weights[word] = {category:value}
+
+    return word_weights
 
 
 class Classifier:
     def __init__(self, model, supress_uncompiled_model_warning=False):
-        if type(model['text']) == dict:
+        if type(model) == dict:
             self.model = model
         else:
             self.model = compile(model)
             if not supress_uncompiled_model_warning:
                 print('WARNING: model was not compiled', file=sys.stderr)
-                print('In development, this is OK, but precompiling the model is preferred for production use.', file=sys.stderr)
+                print('This makes everything slow, because compiling models takes far longer than using them.', file=sys.stderr)
         self.warn = supress_uncompiled_model_warning
 
     def check(self, text):
         model = self.model
-        stopword_value = 0.5
-        try:
-            stopword_value = model['stopword']
-        except:
-            pass
-        stopwords = spacy.lang.en.stop_words.STOP_WORDS
-        model = model['text']
         text = listify(text)
         probs = {}
         for word in text:
-            for category in model.keys():
-                for catword in model[category]:
-                    if word == catword:
-                        weight = ( stopword_value if word in stopwords else 1 ) / len(model[category])
-                        try:
-                            probs[category] += weight 
-                        except:
-                            probs[category] = weight
-        most_likely = ['unknown', 0]
-        for category in probs.keys():
-            if probs[category] > most_likely[1]:
-                most_likely = [category, probs[category]]
-        return most_likely[0]
+            try:
+                for category, value in model[word].items():
+                    try:
+                        probs[category] += value
+                    except KeyError:
+                        probs[category] = value
+            except KeyError:
+                pass
+        try:
+            return sorted(probs.items(), key=lambda x: x[1])[-1][0]
+        except IndexError:
+            return None
