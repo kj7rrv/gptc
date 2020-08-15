@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
 import json
+import sys
 
 parser = argparse.ArgumentParser(description="General Purpose Text Classifier")
 parser.add_argument('model', help='model to use')
@@ -21,4 +22,4 @@ else:
         text = input('Text to analyse: ')
     else:
         text = sys.stdin.read()
-    print(classifier.check(text))
+    print(classifier.classify(text))

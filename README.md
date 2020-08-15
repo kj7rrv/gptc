@@ -15,10 +15,10 @@ If you want to use GPTC programmatically, use the library.
 ### `gptc.Classifier(model)`
 Create a `Classifier` object using the given model (as a Python list/dict, not
 as JSON). If the model is raw (a list), it will print a big warning on stderr.
-### `Classifier.check(text)`
+### `Classifier.classify(text)`
 Classify `text` with GPTC using the model used to instantiate the
 `Classifier`. Returns the category into which the text is placed (as a
-string), or `'unknown'` when it cannot classify the text.
+string), or `None` when it cannot classify the text.
 
 ## Model format
 Since you never really need to mess with compiled models, I won't discuss
@@ -44,7 +44,7 @@ You can use a raw model anywhere you can use a compiled model. However, both
 the library and the CLI tool will print a big warning to stderr if you do
 this. There is a comment in a random place in this document explaining how to
 disable this in the library. (It's in a comment so you can't do it without
-some effort. The warning cannot be disabled in the CLI program without hacking
+some effort.) The warning cannot be disabled in the CLI program without hacking
 the source.
 
 ## Example models
@@ -54,5 +54,5 @@ their works have all gone into the public domain, and their writing style is
 so different that GPTC can easily tell the difference, making it a good
 demonstration.
 
-The raw model is in `twain_shakespeare_raw.json`; the compiled model is in
-`twain_shakespeare.json`.
+The raw model is in `models/raw.json`; the compiled model is in
+`models/compiled.json`.
