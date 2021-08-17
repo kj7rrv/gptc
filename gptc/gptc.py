@@ -6,7 +6,7 @@ import spacy
 nlp = spacy.load('en_core_web_sm')
 
 def _listify(text):
-    """Convert a string to a list of lemmas. Internal use only."""
+    """Convert a string to a list of lemmas."""
     return [string.lemma_.lower() for string in nlp(text) if string.lemma_[0] in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ']
 
 
@@ -61,7 +61,8 @@ class Classifier:
     Parameters
     ----------
     model : dict or list
-        A compiled or raw GPTC model. Please don't use raw models here.
+        A compiled or raw GPTC model. Please don't use raw models except
+        during development.
 
     Attributes
     ----------
