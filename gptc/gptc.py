@@ -1,14 +1,18 @@
 '''Main module for GPTC.'''
 
 import sys
-import spacy
-
-nlp = spacy.load('en_core_web_sm')
 
 def _listify(text):
     """Convert a string to a list of lemmas."""
-    return [string.lemma_.lower() for string in nlp(text) if string.lemma_[0] in 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ']
+    out = [""]
 
+    for char in text.lower():
+        if char.isalpha() or char == "'":
+            out[-1] += char
+        elif out[-1] != "":
+            out.append("")
+
+    return [string for string in out if string]
 
 def compile(raw_model):
     """Compile a raw model.

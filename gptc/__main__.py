@@ -2,14 +2,12 @@
 import argparse
 import json
 import sys
+import gptc
 
 parser = argparse.ArgumentParser(description="General Purpose Text Classifier")
 parser.add_argument('model', help='model to use')
 parser.add_argument('-c', '--compile', help='compile raw model model to outfile', metavar='outfile')
 args = parser.parse_args()
-
-import gptc # PEP 8 violation, but don't fix it
-# Way better for performance of argparse checking
 
 with open(args.model, 'r') as f:
     raw_model = json.load(f)
