@@ -64,26 +64,18 @@ class Classifier:
 
     Parameters
     ----------
-    model : dict or list
-        A compiled or raw GPTC model. Please don't use raw models except
-        during development.
+    model : dict
+        A compiled GPTC model.
 
     Attributes
     ----------
     model : dict
-        The model used. This is always a compiled model.
+        The model used.
 
     """
 
-    def __init__(self, model, supress_uncompiled_model_warning=False):
-        if type(model) == dict:
-            self.model = model
-        else:
-            self.model = compile(model)
-            if not supress_uncompiled_model_warning:
-                print('WARNING: model was not compiled', file=sys.stderr)
-                print('This makes everything slow, because compiling models takes far longer than using them.', file=sys.stderr)
-        self.warn = supress_uncompiled_model_warning
+    def __init__(self, model):
+        self.model = model
 
     def classify(self, text):
         """Classify text.
