@@ -40,13 +40,6 @@ Although GPTC handles models as Python lists (for raw models) or dicts (for
 compiled models), I recommend storing them in JSON format, mainly because the
 command-line tool uses JSON.
 
-You can use a raw model anywhere you can use a compiled model. However, both
-the library and the CLI tool will print a big warning to stderr if you do
-this. There is a comment in a random place in this document explaining how to
-disable this in the library. (It's in a comment so you can't do it without
-some effort.) The warning cannot be disabled in the CLI program without hacking
-the source.
-
 ## Example models
 I provide an example model trained to distinguish between texts written by
 Mark Twain and those written by William Shakespeare. I chose them because
