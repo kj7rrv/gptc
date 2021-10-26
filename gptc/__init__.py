@@ -1,3 +1,4 @@
 """General-Purpose Text Classifier"""
 
-from gptc.gptc import compile, Classifier
+from gptc.compiler import compile
+from gptc.classifier import Classifier
