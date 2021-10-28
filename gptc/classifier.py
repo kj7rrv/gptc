@@ -1,4 +1,5 @@
-import gptc.tokenizer
+import gptc.tokenizer, gptc.compiler, gptc.exceptions
+import warnings
 
 class Classifier:
     """A text classifier.
@@ -16,7 +17,22 @@ class Classifier:
     """
 
     def __init__(self, model):
-        self.model = model
+        try:
+            model_version = model['__version__']
+        except:
+            model_version = 1
+
+        if model_version == 1:
+            self.model = model
+        else:
+            # The model is an unsupported version
+            try:
+                raw_model = model['__raw__']
+            except:
+                raise gptc.exceptions.UnsupportedModelError('this model is unsupported and does not contain a raw model for recompiling')
+
+            warnings.warn("model needed to be recompiled on-the-fly; please re-compile it and use the new compiled model in the future")
+            self.model = gptc.compiler.compile(raw_model)
 
     def classify(self, text):
         """Classify text.
@@ -34,6 +50,7 @@ class Classifier:
         """
 
         model = self.model
+
         text = gptc.tokenizer.tokenize(text)
         probs = {}
         for word in text:

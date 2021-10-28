@@ -42,4 +42,7 @@ def compile(raw_model):
             except KeyError:
                 word_weights[word] = {category:value}
 
+    word_weights['__version__'] = 1
+    word_weights['__raw__'] = raw_model
+
     return word_weights
