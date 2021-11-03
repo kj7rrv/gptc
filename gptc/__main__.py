@@ -7,6 +7,7 @@ import gptc
 parser = argparse.ArgumentParser(description="General Purpose Text Classifier")
 parser.add_argument('model', help='model to use')
 parser.add_argument('-c', '--compile', help='compile raw model model to outfile', metavar='outfile')
+parser.add_argument('-j', '--confidence', help='output confidence dict in json', action='store_true')
 args = parser.parse_args()
 
 with open(args.model, 'r') as f:
@@ -20,4 +21,7 @@ else:
         text = input('Text to analyse: ')
     else:
         text = sys.stdin.read()
-    print(classifier.classify(text))
+    if args.confidence:
+        print(json.dumps(classifier.confidence(text)))
+    else:
+        print(classifier.classify(text))

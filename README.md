@@ -9,8 +9,15 @@ GPTC provides both a CLI tool and a Python library.
     `python -m gptc <modelfile>`
 
 This will prompt for a string and classify it, outputting the category on
-stdout (or "None" if it cannot determine
-anything).
+stdout (or "None" if it cannot determine anything).
+
+Alternatively, if you need confidence data, use:
+
+    `python -m gptc -j <modelfile>`
+
+This will print (in JSON) a dict of the format `{category: probability,
+category:probability, ...}` to stdout.
+
 ### Compiling models
 
     gptc <raw model file> -c|--compile <compiled model file>
@@ -19,9 +26,11 @@ anything).
 ### `gptc.Classifier(model)`
 Create a `Classifier` object using the given *compiled* model (as a dict, not
 JSON).
+#### `Classifier.confidence(text)`
+Classify `text`. Returns a dict of the format `{category: probability,
+category:probability, ...}`
 #### `Classifier.classify(text)`
-Classify `text` with GPTC using the model used to instantiate the
-`Classifier`. Returns the category into which the text is placed (as a
+Classify `text`. Returns the category into which the text is placed (as a
 string), or `None` when it cannot classify the text.
 ## `gptc.compile(raw_model)`
 Compile a raw model (as a list, not JSON) and return the compiled model (as a

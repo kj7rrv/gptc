@@ -34,6 +34,40 @@ class Classifier:
             warnings.warn("model needed to be recompiled on-the-fly; please re-compile it and use the new compiled model in the future")
             self.model = gptc.compiler.compile(raw_model)
 
+    def confidence(self, text):
+        """Classify text with confidence.
+
+        Parameters
+        ----------
+        text : str
+            The text to classify
+
+        Returns
+        -------
+        dict
+            {category:probability, category:probability...} or {} if no words
+            matching any categories in the model were found
+
+        """
+
+        model = self.model
+
+        text = gptc.tokenizer.tokenize(text)
+        probs = {}
+        for word in text:
+            try:
+                total = sum(model[word].values())
+                for category, value in model[word].items():
+                    try:
+                        probs[category] += value / total
+                    except KeyError:
+                        probs[category] = value / total
+            except KeyError:
+                pass
+        total = sum(probs.values())
+        probs = {category: value/total for category, value in probs.items()}
+        return probs
+
     def classify(self, text):
         """Classify text.
 
@@ -45,23 +79,11 @@ class Classifier:
         Returns
         -------
         str or None
-            The most likely category, or None if no guess was made.
+            The most likely category, or None if no words matching any
+            category in the model were found.
 
         """
-
-        model = self.model
-
-        text = gptc.tokenizer.tokenize(text)
-        probs = {}
-        for word in text:
-            try:
-                for category, value in model[word].items():
-                    try:
-                        probs[category] += value
-                    except KeyError:
-                        probs[category] = value
-            except KeyError:
-                pass
+        probs = self.confidence(text)
         try:
             return sorted(probs.items(), key=lambda x: x[1])[-1][0]
         except IndexError:
