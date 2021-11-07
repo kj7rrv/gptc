@@ -42,7 +42,12 @@ def compile(raw_model):
             except KeyError:
                 word_weights[word] = {category:value}
 
-    word_weights['__version__'] = 1
-    word_weights['__raw__'] = raw_model
+    model = {}
+    for word, weights in word_weights.items():
+        total = sum(weights.values())
+        model[word] = {category: weight/total for category, weight in weights.items()}
 
-    return word_weights
+    model['__version__'] = 2
+    model['__raw__'] = raw_model
+
+    return model
