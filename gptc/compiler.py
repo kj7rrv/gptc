@@ -27,7 +27,12 @@ def compile(raw_model):
 
     categories_by_count = {}
     
+    names = []
+
     for category, text in categories.items():
+        if not category in names:
+            names.append(category)
+
         categories_by_count[category] = {}
         for word in text:
             try:
@@ -45,7 +50,11 @@ def compile(raw_model):
     model = {}
     for word, weights in word_weights.items():
         total = sum(weights.values())
-        model[word] = {category: weight/total for category, weight in weights.items()}
+        model[word] = []
+        for category in names:
+            model[word].append(weights.get(category, 0)/total)
+
+    model['__names__'] = names
 
     model['__version__'] = 2
     model['__raw__'] = raw_model

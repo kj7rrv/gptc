@@ -22,7 +22,7 @@ class Classifier:
         except:
             model_version = 1
 
-        if model_version == 1:
+        if model_version == 2:
             self.model = model
         else:
             # The model is an unsupported version
@@ -56,16 +56,15 @@ class Classifier:
         probs = {}
         for word in text:
             try:
-                total = sum(model[word].values())
-                for category, value in model[word].items():
+                for category, value in enumerate(model[word]):
                     try:
-                        probs[category] += value / total
+                        probs[category] += value
                     except KeyError:
-                        probs[category] = value / total
+                        probs[category] = value
             except KeyError:
                 pass
         total = sum(probs.values())
-        probs = {category: value/total for category, value in probs.items()}
+        probs = {model['__names__'][category]: value/total for category, value in probs.items()}
         return probs
 
     def classify(self, text):
