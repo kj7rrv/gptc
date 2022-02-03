@@ -1,3 +1,6 @@
+# NO LONGER MAINTAINED ON GITHUB
+New repo: https://git.kj7rrv.com/kj7rrv/gptc
+
 # GPTC
 General-purpose text classifier in Python
 
